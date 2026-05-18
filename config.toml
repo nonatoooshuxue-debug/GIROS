@@ -1,0 +1,13 @@
+[theme]
+primaryColor = "#FF4B4B"
+
+# Cor do fundo principal (Branco)
+backgroundColor = "#FFFFFF"
+
+# Cor do fundo de widgets/áreas secundárias (Cinza claro para dar contraste)
+secondaryBackgroundColor = "#F0F2F6"
+
+# Cor do texto (Preto/Cinza escuro para ler no fundo branco)
+textColor = "#31333F"
+
+font = "sans serif"
