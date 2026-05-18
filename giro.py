@@ -1,19 +1,63 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
+import pygsheets
+from google.oauth2 import service_account
 
 st.set_page_config(layout="wide")
-@st.cache_data()
-def giro():
-    planilha = "GIROS COMODATOS.xlsx"
-    abas = ["CAPITALI CRUZ","CAPITALI ITAPIPOCA"]
-    meu_dfs = {}
-    for nome_ab in abas:
-     df = pd.read_excel(planilha, sheet_name=nome_ab)
-     df.columns = df.columns.str.strip().str.upper()
-     meu_dfs[nome_ab] = df
+@st.cache_data(ttl=600)
+def giro_online():
+    escopos = [
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive",
+    ]
 
-    return meu_dfs
+    info_dict = {
+        "type": st.secrets["giros"]["type"],
+        "project_id": st.secrets["giros"]["project_id"],
+        "private_key_id": st.secrets["giros"]["private_key_id"],
+        "private_key": st.secrets["giros"]["private_key"].replace(
+            "\\n", "\n"
+        ),
+        "client_email": st.secrets["giros"]["client_email"],
+        "client_id": st.secrets["giros"]["client_id"],
+        "auth_uri": st.secrets["giros"]["auth_uri"],
+        "token_uri": st.secrets["giros"]["token_uri"],
+        "auth_provider_x509_cert_url": st.secrets["giros"][
+            "auth_provider_x509_cert_url"
+        ],
+        "client_x509_cert_url": st.secrets["giros"]["client_x509_cert_url"],
+        "universe_domain": st.secrets.get("giros", {}).get(
+            "universe_domain", "googleapis.com"
+        ),
+    }
+
+    creds = service_account.Credentials.from_service_account_info(
+        info_dict, scopes=escopos
+    )
+    client = pygsheets.client.Client(creds)
+
+    sheet_id = "1rr_3GJ6eg1Whd1NkdiHbObyhWD7L6Z7Bh2ZZ_UR8b1Q"
+
+    abas = ["CAPITALI CRUZ", "CAPITALI ITAPIPOCA"]
+    meu_dfs = {}
+
+    try:
+        arquivo = client.open_by_key(sheet_id)
+
+        for nome_ab in abas:
+            aba = arquivo.worksheet_by_title(nome_ab)
+
+            df = aba.get_as_df()
+
+            df.columns = df.columns.str.strip().str.upper()
+
+            meu_dfs[nome_ab] = df
+
+        return meu_dfs
+
+    except Exception as e:
+        st.error(f"Erro ao acessar a planilha no Google Drive: {e}")
+        return None
 
 
 meu_dfs = giro()
