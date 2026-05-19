@@ -100,7 +100,7 @@ df_geral3 = df_geral2[df_geral2["SETOR"].astype(str).isin(rn_fil)]
 
 st.subheader(f"Análise por GV: {gv_fil}")
              
-colunas_alvo = ["CLIENTE", "NOME FANTASIA", "SETOR", "TIPO DE VASILHAME", "CAIXAS COMODATAS","GV", "COMPROU", "FALTA COMPRAR", "META", "TENDÊNCIA"]
+colunas_alvo = ["CLIENTE", "NOME FANTASIA", "SETOR", "TIPO DE VASILHAME", "CAIXAS COMODATAS","GV", "COMPROU", "FALTA COMPRAR", "META", "TENDÊNCIA", "CAIXAS COMODATADAS"]
 df_alvo = df_geral3[[c for c in colunas_alvo if c in df_geral3.columns]].copy()
 col_real = next((c for c in df_alvo.columns if "TENDEN" in c), None)
 
