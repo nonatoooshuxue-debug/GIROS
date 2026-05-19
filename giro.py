@@ -86,6 +86,7 @@ resultado_parcial = (soma_ok / soma_quant * 100) if soma_quant > 0 else 0
 tendencia = (resultado_parcial/inicio_mes)*31
 delta_parcial =  metas_dinamicas - resultado_parcial
 delta_tend=  tendencia - metas_dinamicas
+distancia = resultado_parcial - meta_dinamicas
 
 
 tipo_giro = sorted(df_geral["TIPO GIRO MENSAL"].dropna().astype(str).unique())
@@ -108,7 +109,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.metric(label="Meta", value=f"{metas_dinamicas: .2f}%")
 with col2:
-    st.metric(label="Resultado Parcial", value=f"{resultado_parcial: .2f}%", delta=f"{resultado_parcial: .2f}%")
+    st.metric(label="Resultado Parcial", value=f"{resultado_parcial: .2f}%", delta=f"{distancia: .2f}%")
 with col3:
     st.metric(label="Tendência", value=f"{tendencia: .2f}%", delta=f"{delta_tend: .2f}%")
 st.divider()
