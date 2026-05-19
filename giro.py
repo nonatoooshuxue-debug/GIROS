@@ -68,6 +68,10 @@ df_geral = meu_dfs[unidade_fil]
 # filtro por tipo de giro
 inicio_mes = pd.to_numeric(df_geral["INICIO DO MÊS - HOJE"], errors="coerce").iloc[0]
 # métricas
+gv_ = sorted(df_geral["GV"].dropna().astype(str).unique())
+gv_fil = st.sidebar.multiselect("GV:", options=gv_)
+df_geral = df_geral[df_geral["GV"].astype(str).isin(gv_fil)]
+
 
 metas_unidade = {"CAPITALI CRUZ": 30.0, "CAPITALI ITAPIPOCA": 66.0
                  }
@@ -83,12 +87,6 @@ tendencia = (resultado_parcial/inicio_mes)*31
 delta_parcial =  metas_dinamicas - resultado_parcial
 delta_tend=  tendencia - metas_dinamicas
 
-
-
-# filtro por gv
-gv_ = sorted(df_geral["GV"].dropna().astype(str).unique())
-gv_fil = st.sidebar.multiselect("GV:", options=gv_)
-df_geral = df_geral[df_geral["GV"].astype(str).isin(gv_fil)]
 
 tipo_giro = sorted(df_geral["TIPO GIRO MENSAL"].dropna().astype(str).unique())
 giro_fil = st.sidebar.multiselect("Selecione o Tipo de Giro:", options=tipo_giro)
