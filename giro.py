@@ -4,7 +4,7 @@ import pygsheets
 from google.oauth2 import service_account
 
 st.set_page_config(layout="wide")
-@st.cache_data(ttl=300)
+@st.cache_data(ttl=100)
 def giro():
     escopos = [
         "https://www.googleapis.com/auth/spreadsheets",
